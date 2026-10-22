@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ciclo de vida de uma requisição TCP/IP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Ciclo de vida de uma requisição TCP/IP</h1>
+      <p>Acompanhe, salto a salto, o caminho de uma requisição HTTP sobre TCP/IPv4 do seu computador até o servidor.</p>
+    </div>
+    <form id="form" class="form" autocomplete="off">
+      <label>Destino
+        <input id="destino" list="destinos" value="www.exemplo.com.br" spellcheck="false" required>
+        <datalist id="destinos">
+          <option value="www.exemplo.com.br"></option>
+          <option value="192.0.2.80"></option>
+          <option value="192.168.0.20"></option>
+          <option value="8.8.8.8"></option>
+        </datalist>
+      </label>
+      <label>TTL inicial
+        <input id="ttl" type="number" min="1" max="255" value="64">
+      </label>
+      <button type="submit" class="primary">Simular</button>
+    </form>
+    <div class="presets" id="presets" aria-label="Cenários prontos"></div>
+    <p id="erro" class="erro" role="alert" hidden></p>
+  </header>
+
+  <main>
+    <section class="card topo" aria-label="Mapa da rede">
+      <svg id="svg" role="img" aria-label="Topologia da rede simulada"></svg>
+      <div class="legend">
+        <span><i class="dot tag-DNS"></i>DNS</span>
+        <span><i class="dot tag-ARP"></i>ARP</span>
+        <span><i class="dot tag-TCP"></i>TCP</span>
+        <span><i class="dot tag-HTTP"></i>HTTP</span>
+        <span><i class="dot tag-ICMP"></i>ICMP</span>
+        <span class="hint">Clique em um equipamento para ver interfaces e rotas.</span>
+      </div>
+    </section>
+
+    <section class="card controls" aria-label="Controles da simulação">
+      <div class="buttons">
+        <button id="first" title="Voltar ao início (Home)" aria-label="Voltar ao início">⏮</button>
+        <button id="prev" title="Passo anterior (←)" aria-label="Passo anterior">◀</button>
+        <button id="play" class="primary" title="Reproduzir ou pausar (espaço)">▶ Reproduzir</button>
+        <button id="next" title="Próximo passo (→)" aria-label="Próximo passo">▶</button>
+        <button id="nextpkt" title="Pular para o próximo pacote (N)">Próximo pacote ⏭</button>
+      </div>
+      <input id="scrub" type="range" min="0" max="0" value="0" aria-label="Posição na simulação">
+      <span id="counter" class="counter">–</span>
+      <label class="speed">Velocidade
+        <select id="speed">
+          <option value="0.5">0,5×</option>
+          <option value="1" selected>1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </label>
+    </section>
+
+    <div class="grid">
+      <aside class="card timeline" aria-label="Linha do tempo dos pacotes">
+        <h2>Pacotes</h2>
+        <div id="timeline"></div>
+      </aside>
+
+      <section class="card explain" aria-live="polite">
+        <ol class="layers" id="layers" aria-label="Camada em ação">
+          <li data-layer="aplicacao">Aplicação</li>
+          <li data-layer="transporte">Transporte</li>
+          <li data-layer="rede">Rede</li>
+          <li data-layer="enlace">Enlace</li>
+          <li data-layer="fisica">Física</li>
+        </ol>
+        <div id="explain"></div>
+      </section>
+
+      <section class="card frame">
+        <h2>Encapsulamento</h2>
+        <div id="frame"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="dialog">
+    <div id="dialog-body"></div>
+    <form method="dialog"><button class="primary">Fechar</button></form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
